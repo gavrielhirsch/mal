@@ -1,4 +1,4 @@
-import re, mal_types
+import re, mal_types, printer
 
 class Reader:
 	def __init__(self, tokens, pos):
@@ -11,7 +11,7 @@ class Reader:
 		return curr
 
 	def peek(self):
-		if(len(self.tokens) > self.pos):
+		if (len(self.tokens) > self.pos):
 			return self.tokens[self.pos]
 		else:
 			return None
@@ -26,20 +26,25 @@ def read_str(s):
 
 def read_form(reader):
 	next = reader.next()
-	if(next == '('):
+	if (next == '('):
 		return read_list(reader)
 	return read_atom(next)
 
-def read_list(reader): # Should change this to use more LISP-y lists, can add to mal_types
-	l = []
-	while(reader.peek() != ')'):
-		l.append(read_form(reader))
-	return l
+def read_list(reader):
+	if (reader.peek() == ')'):
+		reader.next()
+		return None
+	else:
+		first = read_form(reader)
+		rest = read_list(reader)
+		return mal_types.cons(first, rest)
 
 def read_atom(s):
-	if(mal_types.isInt(s)):
+	if (mal_types.isNil(s)):
+		return None
+	elif (mal_types.isInt(s)):
 		return int(s)
-	elif(mal_types.isFloat(s)):
+	elif (mal_types.isFloat(s)):
 		return float(s)
 	else:
 		return mal_types.Symbol(s)
