@@ -1,3 +1,5 @@
+import sys, traceback
+
 def READ(s):
 	return s
 
@@ -16,3 +18,5 @@ while True:
 		print(rep(line))
 	except EOFError:
 		break
+	except Exception:
+		print("".join(traceback.format_exception(*sys.exc_info())))

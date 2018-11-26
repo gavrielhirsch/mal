@@ -1,4 +1,4 @@
-import reader, printer
+import sys, traceback, reader, printer
 
 def READ(s):
 	return reader.read_str(s)
@@ -18,3 +18,5 @@ while True:
 		print(rep(line))
 	except EOFError:
 		break
+	except Exception:
+		print("".join(traceback.format_exception(*sys.exc_info())))
